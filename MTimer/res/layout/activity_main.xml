@@ -39,20 +39,11 @@
                 android:layout_height="wrap_content"
                 android:numeric="integer" />
 
-            <Button
-                android:id="@+id/btn_submit"
-                android:layout_width="80dip"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_default_bg"
-                android:text="Submit" />
-
-            <Button
-                android:id="@+id/btn_stop"
+            <ImageView
+                android:id="@+id/iv_start_stop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:background="@drawable/button_default_bg"
-                android:text="Stop" />
+                android:background="@drawable/start"/>
         </LinearLayout>
 
         <TextView

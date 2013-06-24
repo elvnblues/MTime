@@ -47,8 +47,7 @@ public class MainActivity extends Activity {
 	private EditText et_first_time;
 	private TextView tv_show_time;
 	private TextView tv_round;
-	private Button btn_submit;
-	private Button btn_stop;
+	private ImageView iv_start_stop;
 	
 	private EditText et_round_cound;
 	private ToggleButton tb_shock;
@@ -73,6 +72,8 @@ public class MainActivity extends Activity {
 
 	private Vibrator mVibrator;// 振动
 	private boolean isShock;
+	
+	private boolean isStart = false;//是否开始
 
 	// popup_menu
 	private View contentView;
@@ -106,8 +107,7 @@ public class MainActivity extends Activity {
 		et_first_time = (EditText) findViewById(R.id.et_first_time);
 		tv_show_time = (TextView) findViewById(R.id.tv_show_time);
 		tv_round = (TextView) findViewById(R.id.tv_round);
-		btn_submit = (Button) findViewById(R.id.btn_submit);
-		btn_stop = (Button) findViewById(R.id.btn_stop);
+		iv_start_stop = (ImageView) findViewById(R.id.iv_start_stop);
 		
 		et_round_cound = (EditText)contentView.findViewById(R.id.et_round_cound);
 		tb_shock = (ToggleButton)contentView.findViewById(R.id.tb_shock);
@@ -137,8 +137,7 @@ public class MainActivity extends Activity {
 
 	private void setListener() {
 		et_first_time.setOnTouchListener(my_onTouchListener);
-		btn_submit.setOnClickListener(my_onClickListener);
-		btn_stop.setOnClickListener(my_onClickListener);
+		iv_start_stop.setOnClickListener(my_onClickListener);
 		btn_popup_submit.setOnClickListener(my_onClickListener);
 		btn_popup_cancel.setOnClickListener(my_onClickListener);
 		iv_right.setOnClickListener(my_onClickListener);
@@ -159,29 +158,34 @@ public class MainActivity extends Activity {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
-			case R.id.btn_submit:
-				if (et_first_time.getText().toString().trim().equals("")) {
-					Toast.makeText(MainActivity.this, "Please,Get me time.",
-							Toast.LENGTH_SHORT).show();
-					et_first_time.setFocusable(true);
-				} else {
-					round = 1;// 第一回合开始
-					tv_round.setText((int) round + "");
-					first_time = Integer.parseInt(et_first_time.getText()
-							.toString()) * 1000;
-					show_time = Integer.parseInt(et_first_time.getText()
-							.toString()) + 1;
-					tv_show_time.setText(show_time + "");
-					timer1 = new Timer();
-					timetask();
-					timer1.schedule(task, first_time, first_time);
-					timer1.scheduleAtFixedRate(task2, 0, 1000);
+			case R.id.iv_start_stop:
+				if(isStart){//开始
+					
+					if (et_first_time.getText().toString().trim().equals("")) {
+						Toast.makeText(MainActivity.this, "Please,Get me time.",
+								Toast.LENGTH_SHORT).show();
+						et_first_time.setFocusable(true);
+					} else {
+						isStart = false;
+						iv_start_stop.setBackgroundResource(R.drawable.stop);
+						round = 1;// 第一回合开始
+						tv_round.setText((int) round + "");
+						first_time = Integer.parseInt(et_first_time.getText()
+								.toString()) * 1000;
+						show_time = Integer.parseInt(et_first_time.getText()
+								.toString()) + 1;
+						tv_show_time.setText(show_time + "");
+						timer1 = new Timer();
+						timetask();
+						timer1.schedule(task, first_time, first_time);
+						timer1.scheduleAtFixedRate(task2, 0, 1000);
+					}
+					getWindow().addFlags(
+							WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);// 隐藏软键盘
+				}else{//停止
+					Stop();
 				}
-				getWindow().addFlags(
-						WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);// 隐藏软键盘
-				break;
-			case R.id.btn_stop:
-				Stop();
+				
 				break;
 			case R.id.btn_popup_submit://popup_window submit button
 				Stop();//结束计时重新开始
@@ -285,6 +289,9 @@ public class MainActivity extends Activity {
 			}
 			timer1.cancel();
 			timer1 = null;
+			
+			iv_start_stop.setBackgroundResource(R.drawable.start);
+			isStart = true;
 		}
 		round = 0;// 重新开始
 		tv_round.setText(((int) round) + "");
