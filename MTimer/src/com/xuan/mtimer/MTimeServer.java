@@ -8,6 +8,7 @@ import android.os.IBinder;
 
 public class MTimeServer extends Service {
 	private Timer timer1;
+	
 
 	@Override
 	public IBinder onBind(Intent intent) {

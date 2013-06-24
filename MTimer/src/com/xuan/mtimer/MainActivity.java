@@ -3,6 +3,7 @@ package com.xuan.mtimer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
 import android.app.Activity;
 import android.app.Service;
 import android.content.SharedPreferences;
@@ -78,6 +79,8 @@ public class MainActivity extends Activity {
 	// popup_menu
 	private View contentView;
 	private PopupWindow m_popupWindow;
+	
+	// popup_finish
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,12 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		init();
 		setListener();
+	}
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		
 	}
 
 	private void init() {
@@ -131,6 +140,8 @@ public class MainActivity extends Activity {
 		m_popupWindow.setOutsideTouchable(true);
 		m_popupWindow.setAnimationStyle(R.style.PopupAnimation);
 		
+		//返回键的弹出窗口
+		
 		et_round_cound.setHint(end_round+" Rounds Now");
 		tb_shock.setChecked(isShock);
 	}
@@ -160,7 +171,6 @@ public class MainActivity extends Activity {
 			switch (v.getId()) {
 			case R.id.iv_start_stop:
 				if(isStart){//开始
-					
 					if (et_first_time.getText().toString().trim().equals("")) {
 						Toast.makeText(MainActivity.this, "Please,Get me time.",
 								Toast.LENGTH_SHORT).show();
@@ -302,6 +312,26 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			m_popupWindow.showAsDropDown(include_title);
+		}else if(keyCode == KeyEvent.KEYCODE_BACK){
+			final MPopupwindow mpopup = new MPopupwindow(
+					MainActivity.this);
+			mpopup.setTitleValue("提示");
+			mpopup.setContentValue("确定要退出吗?");
+			mpopup.setOneButtonValue("取消");
+			mpopup.setTwoButtonValue("确定");
+			mpopup.setOneButtonListener(new OnClickListener() {
+				public void onClick(View v) {
+					mpopup.dismiss();
+				}
+			});
+			mpopup.setTwoButtonListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mpopup.dismiss();
+					finish();
+				}
+			});
+			mpopup.show();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
